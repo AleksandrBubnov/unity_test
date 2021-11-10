@@ -6,7 +6,7 @@ public class CharacterMovement : MonoBehaviour
 
     [SerializeField] float _speed = 4f;
     [SerializeField] float _gravity = -9.81f;
-    [SerializeField] float jumpHeight = 2f;
+    [SerializeField] float _jumpHeight = 2f;
 
     private Vector3 _velosity;
     private bool _isGrounded;
@@ -21,7 +21,7 @@ public class CharacterMovement : MonoBehaviour
         if (_isGrounded && _velosity.y < 0) _velosity.y = -2f;
 
         if (Input.GetButtonDown("Jump") && _isGrounded)
-            _velosity.y = Mathf.Sqrt(jumpHeight * -_gravity);
+            _velosity.y = Mathf.Sqrt(_jumpHeight * -_gravity);
     }
     private void FixedUpdate()
     {
@@ -34,6 +34,5 @@ public class CharacterMovement : MonoBehaviour
             transform.right * moveX + _velosity;
 
         _characterController.Move(moveDirection * _speed * Time.deltaTime);
-
     }
 }

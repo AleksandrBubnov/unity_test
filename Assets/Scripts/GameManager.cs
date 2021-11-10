@@ -3,7 +3,6 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    private int _score;
     private static GameManager instance;
     public static GameManager GetInstance()
     {
@@ -12,27 +11,18 @@ public class GameManager : MonoBehaviour
     }
     private void Awake()
     {
-        if (instance == null) instance = this;
+        if (instance == null)
+        {
+            instance = this;
+            //DontDestroyOnLoad(this.gameObject);
+        }
         else Destroy(this);
 
-        DontDestroyOnLoad(this.gameObject);
     }
-
-    void Start()
+    private void Start()
     {
-        this._score = 0;
-    }
-    public void AddScore(int value = 0)
-    {
-        this._score += value;
-    }
-    public void SetScore(int score = 0)
-    {
-        this._score = score;
-    }
-    public int GetScore()
-    {
-        return this._score;
+        if (PlayerPrefs.HasKey("Score")) Player.Instance.SetScore(PlayerPrefs.GetInt("Score"));
+        if (PlayerPrefs.HasKey("Health")) Player.Instance.SetHealth(PlayerPrefs.GetInt("Health"));
     }
     public void LevelRestartIn(float time = 0)
     {
@@ -40,6 +30,31 @@ public class GameManager : MonoBehaviour
     }
     public void LevelRestart()
     {
+        SaveData();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Time.timeScale = 1;
+    }
+    public void MainMenu()
+    {
+        //SceneManager.LoadScene(0);
+        SceneManager.LoadScene("MainMenu");
+    }
+    public void ExitGame()
+    {
+        SaveData();
+        Application.Quit();
+    }
+    private void SaveData()
+    {
+        PlayerPrefs.SetInt("Score", Player.Instance.ScoreTotal);
+        PlayerPrefs.SetInt("Health", Player.Instance.Health);
+    }
+    public void DeleteData()
+    {
+        Player.Instance.SetScore(0);
+        Player.Instance.SetHealth(Player.Instance.HealthMax);
+        PlayerPrefs.SetInt("Score", Player.Instance.ScoreTotal);
+        PlayerPrefs.SetInt("Health", Player.Instance.Health);
+        //PlayerPrefs.DeleteAll();
     }
 }
