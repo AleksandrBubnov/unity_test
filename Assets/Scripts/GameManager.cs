@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     }
     private void Awake()
     {
+        Time.timeScale = 1;
         if (instance == null)
         {
             instance = this;
@@ -32,6 +33,12 @@ public class GameManager : MonoBehaviour
     {
         SaveData();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Time.timeScale = 1;
+    }
+    public void NextLevel()
+    {
+        SaveData();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         Time.timeScale = 1;
     }
     public void MainMenu()
